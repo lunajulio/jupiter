@@ -1,0 +1,39 @@
+/* Navbar.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000000; /* Cambiar según tus preferencias */
+  color: white;
+  padding: 10px 20px;
+  font-family: 'Arial', sans-serif; /* Cambiar la fuente */
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  font-size: 30px; /* Tamaño de fuente */
+  font-family: 'Viga';
+  margin-left: 2%; /* Alinea el logo a la derecha */
+}
+
+.navbar__logo-icon {
+  width: 40px; /* Ancho del icono */
+  height: auto; /* Altura automática */
+  margin-right: 10px; /* Espacio entre el icono y el texto */
+}
+
+.navbar__menu {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente los elementos del menú */
+  list-style-type: none; /* Elimina los estilos de lista predeterminados */
+}
+
+.navbar__menu-item {
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.navbar__menu-item:last-child {
+  margin-right: 0;
+}

@@ -1,32 +1,57 @@
 /* Navbar.css */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #000000; /* Cambiar según tus preferencias */
-  color: white;
-  padding: 10px 20px;
-  font-family: 'Arial', sans-serif; /* Cambiar la fuente */
+ /* Frame 7 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 237.56px;
+    z-index: 999;
+
+    position: absolute;
+    width: 1204.42px;
+    height: 48.12px;
+    left: 86.88px;
+    top: 30px;
+
+
 }
 
 .navbar__logo {
   display: flex;
   align-items: center;
   font-size: 30px; /* Tamaño de fuente */
-  font-family: 'Viga';
+  /* cambiar color de la fuente */
+  color: #fff;
+  font-family: 'Work Sans', sans-serif; 
+  /*poner la fuente con más negrita */
+  font-weight: 500;
   margin-left: 2%; /* Alinea el logo a la derecha */
 }
 
-.navbar__logo-icon {
-  width: 40px; /* Ancho del icono */
-  height: auto; /* Altura automática */
-  margin-right: 10px; /* Espacio entre el icono y el texto */
-}
+
 
 .navbar__menu {
   display: flex;
-  justify-content: center; /* Centra horizontalmente los elementos del menú */
+  justify-content: flex-start;
   list-style-type: none; /* Elimina los estilos de lista predeterminados */
+  font-family: 'IBM Plex Sans', sans-serif; /* Cambiar la fuente */
+  color: #fff;
+
+      /* Menu */
+
+    width: 406.1px;
+    height: 23.1px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
 }
 
 .navbar__menu-item {
@@ -37,3 +62,9 @@
 .navbar__menu-item:last-child {
   margin-right: 0;
 }
+
+
+
+
+
+

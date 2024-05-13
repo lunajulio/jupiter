@@ -1,8 +1,116 @@
 /* Background.css */
-.background {
-    width: 100%;
-    height: 100vh; /* Esto asegura que el fondo ocupe toda la altura de la ventana */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+.background-container {
+  width: 100%;
+  height: 100vh; 
+  position: relative;
+  overflow: hidden; /* Evita el desbordamiento */
+}
+
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/fondo.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1; /* Coloca la imagen de fondo detrás del contenido */
+}
+
+.background-content {
+  position: relative;
+  z-index: 1; /* Asegura que el contenido esté encima de la imagen de fondo */
+}
+
+.imagen-superpuesta {
+  position: absolute;
+  top: 80%; 
+  left: 70%; 
+  transform: translate(-50%, -50%); 
+  animation: mover 3s ease infinite alternate; 
+  z-index: 1; /* Asegura que la imagen esté detrás del texto */
+  margin-top: 400px; /* Ajusta este valor según sea necesario para mover la imagen hacia abajo */
+}
+
+@keyframes mover {
+  0% {
+      transform: translate(-50%, -50%) translateX(-20px); /* Estado inicial, mueve 20px hacia la izquierda */
   }
+  100% {
+      transform: translate(-50%, -50%) translateX(20px); /* Estado final, mueve 20px hacia la derecha */
+  }
+}
+
+.background__title { 
+  font-family: monospace;
+  position: relative; 
+  float: left;
+  color: #fff;
+  font-size: 60px;
+  height: 59px;
+  left: calc(40% - 703.64px/2 - 0px);
+  top: 205.09px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.descrip {
+  position: absolute;
+  width: 576px;
+  height: 69px;
+  left: 242px;
+  top: 300px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 43px;
+  color: #FFFFFF;
+  flex: none;
+  order: 2;
+  flex-grow: 0;
+  z-index: 2;
+}
+
+.background__button {
+  position: fixed;
+  align-items: center;
+  top: 500px; /* Ajusta esta posición según sea necesario */
+  left: 239px; /* Ajusta esta posición según sea necesario */
+  background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  display: flex;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 20px;
+  justify-content: center;
+  line-height: 1em;
+  max-width: 100%;
+  min-width: 140px;
+  padding: 19px 24px;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.background__button:active,
+.background__button:hover {
+  outline: 0;
+}
+
+@media (min-width: 768px) {
+  .background__button {
+    font-size: 24px;
+    min-width: 196px;
+  }
+}
+

@@ -114,3 +114,9 @@
   }
 }
 
+.background__button a {
+  text-decoration: none; /* Quita el subrayado */
+  color: inherit; /* Mantiene el color del texto */
+}
+
+

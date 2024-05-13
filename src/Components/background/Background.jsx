@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import './background.css';
 import imagenSuperpuesta from '../../assets/header-img.svg';
+import { Link } from 'react-router-dom';
+
 
 const Background = () => {
   const [text, setText] = useState('');
@@ -29,7 +31,7 @@ const Background = () => {
           <p className="descrip">Design and create with UML the fun way! Discover our interactive tools to learn and play while you bring your ideas to life.</p>
         </div>
       </div>
-      <button className="background__button">CREATE</button>
+      <button className="background__button"><Link to="/create">PLAY</Link></button>
     </div>
   );
 };

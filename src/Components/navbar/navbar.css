@@ -1,4 +1,10 @@
 /* Navbar.css */
+
+.navbar__menu-item a {
+  color: rgb(255, 255, 255); /* Cambia el color de los enlaces a negro */
+  text-decoration: none; /* Elimina el subrayado de los enlaces */
+}
+
 .navbar {
  /* Frame 7 */
 

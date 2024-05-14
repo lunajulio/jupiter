@@ -8,9 +8,9 @@ const Navbar = () => {
           JUPITER
         </div>
         <ul className="navbar__menu">
-          <li className="navbar__menu-item">CONCEPTS</li>
-          <li className="navbar__menu-item">SUPERVIVENCIA</li>
-          <li className="navbar__menu-item"><Link to="/create">CREATIVO</Link></li>
+          <li className="navbar__menu-item"><Link to="/concept">CONCEPTS</Link></li>
+          <li className="navbar__menu-item"><Link to="/challengue">SURVIVE</Link></li>
+          <li className="navbar__menu-item"><Link to="/create">CREATIVE</Link></li>
         </ul>
       </div>
   );

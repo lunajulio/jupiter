@@ -1,0 +1,29 @@
+
+.menulist-container {
+    display: flex;
+}
+
+.menu-container {
+    margin-right: 20px; /* Ajusta según sea necesario */
+}
+
+.content-container {
+    flex: 1; /* El contenido ocupa todo el espacio restante */
+}
+
+
+.menu-bar {
+    flex: 1; /* Ocupa el espacio restante */
+    margin-right: 20px; /* Espacio entre el menú y el contenido */
+    height: 88vh;
+    margin-top:2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 1rem;
+    position: relative
+}
+
+.content {
+    flex: 1; /* Ocupa el espacio restante */
+}

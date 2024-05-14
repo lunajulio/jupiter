@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import './background.css';
 import imagenSuperpuesta from '../../assets/header-img.svg';
 import { Link } from 'react-router-dom';
+import Navbar from '../navbar/Navbar';
 
 
 const Background = () => {
@@ -23,6 +24,7 @@ const Background = () => {
 
   return (
     <div className="background-container">
+      <Navbar />
       <div className="background-image"></div>
       <div className="background-content">
         <img src={imagenSuperpuesta} alt="Imagen Superpuesta" className="imagen-superpuesta" />

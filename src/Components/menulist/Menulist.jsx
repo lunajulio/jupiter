@@ -1,14 +1,23 @@
-/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import { Menu } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import './menulist.css';
-import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import exampleMarkdown from '../../assets/markdown1.md'; // Importa el archivo Markdown
 
 const Menulist = () => {
     const [content, setContent] = useState('Home');
 
+    // Define el contenido Markdown para cada opción del menú
+    const markdownContents = {
+        home: '# Welcome to the Home Page',
+        concept1: '# Concept 1 Markdown Content',
+        concept2: '# Concept 2 Markdown Content',
+        example: exampleMarkdown // Contenido del archivo Markdown importado
+    };
+
     return (
-        <div className="menulist-container">
+        <div className="row">
             {/* Menú */}
             <div className="menu-container">
                 <Menu
@@ -26,28 +35,22 @@ const Menulist = () => {
                         <Menu.Item key="concept1">Concept 1</Menu.Item>
                         <Menu.Item key="concept2">Concept 2</Menu.Item>
                     </Menu.SubMenu>
-                    <Menu.Item key="concept" icon={<HomeOutlined />}>
-                        Activity
+                    <Menu.Item key="example" icon={<HomeOutlined />}>
+                        Example
                     </Menu.Item>
-                    <Menu.Item key="about" icon={<HomeOutlined />}>
-                        About
-                    </Menu.Item>
-                    <Menu.Item key="contact" icon={<HomeOutlined />}>
-                        Contact
-                    </Menu.Item>
+                    {/* Agrega más opciones según sea necesario */}
                 </Menu>
             </div>
 
             {/* Contenido */}
             <div className="content-container">
-                <Content content={content} />
+                {/* Renderiza el contenido Markdown basado en la opción seleccionada */}
+                <div className="content">
+                    <ReactMarkdown>{markdownContents[content]}</ReactMarkdown>
+                </div>
             </div>
         </div>
     );
-};
-
-const Content = ({ content }) => {
-    return <div className="content">{content}</div>;
 };
 
 export default Menulist;

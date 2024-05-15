@@ -11,7 +11,6 @@ const Concept = () => {
             <Logo/>
             <Menulist/>
           </Sider>
-        
         </Layout>
         
       );

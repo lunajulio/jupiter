@@ -1,19 +1,8 @@
 
-.menulist-container {
-    display: flex;
-}
-
-.menu-container {
-    margin-right: 20px; /* Ajusta según sea necesario */
-}
-
-.content-container {
-    flex: 1; /* El contenido ocupa todo el espacio restante */
-}
 
 
 .menu-bar {
-    flex: 1; /* Ocupa el espacio restante */
+     /* flex: 1; Ocupa el espacio restante */
     margin-right: 20px; /* Espacio entre el menú y el contenido */
     height: 88vh;
     margin-top:2rem;
@@ -24,6 +13,18 @@
     position: relative
 }
 
-.content {
-    flex: 1; /* Ocupa el espacio restante */
+.row {
+    display: flex;
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+    box-sizing: border-box; /* Incluye padding y borde en el ancho total */
 }
+
+.menu-container {
+    flex: 0 0 auto;
+    width: 200px;
+}
+
+.content-container {
+    flex: 1;
+}
+

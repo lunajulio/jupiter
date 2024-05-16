@@ -1,6 +1,4 @@
 
-
-
 .menu-bar {
      /* flex: 1; Ocupa el espacio restante */
     margin-right: 20px; /* Espacio entre el menú y el contenido */
@@ -13,18 +11,11 @@
     position: relative
 }
 
-.row {
-    display: flex;
-    width: 100%; /* Asegura que ocupe todo el ancho disponible */
-    box-sizing: border-box; /* Incluye padding y borde en el ancho total */
-}
 
 .menu-container {
     flex: 0 0 auto;
     width: 200px;
 }
 
-.content-container {
-    flex: 1;
-}
+
 

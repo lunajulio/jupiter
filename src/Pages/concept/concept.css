@@ -24,3 +24,10 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Añade una sombra para resaltar el contenido */
 }
 
+/* custom.css */
+.logo {
+    @apply text-2xl text-white font-bold ml-2;
+    font-family: 'Work Sans', sans-serif;
+  }
+  
+

@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkHtml from 'remark-html';
 import { Link } from 'react-router-dom';
+import './concept.css';
 
 const { Sider, Content, Header } = Layout;
 
@@ -40,7 +41,7 @@ const Concept = () => {
         <Layout className="min-h-screen">
             <Header className="bg-dark text-white flex justify-between items-center p-0">
                 <div className="logo p-4">
-                    <h1 className="text-white text-2xl font-bold">Mi Proyecto</h1>
+                    <h1 className="logo">JUPITER</h1>
                 </div>
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
                     <Menu.Item key="1">

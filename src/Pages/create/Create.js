@@ -1,72 +1,97 @@
-import { useEffect } from 'react';
-import Phaser from 'phaser';
+import { useState, useRef, useCallback } from 'react';
+import ReactFlow, {
+  ReactFlowProvider,
+  addEdge,
+  useNodesState,
+  useEdgesState,
+  Controls,
+} from 'reactflow';
+import 'reactflow/dist/style.css';
 
-function Create() {
+import Sidebar from './Sidebar.js';
 
-    useEffect(() => {
-        const config = {
-            type: Phaser.AUTO,
-            width: 800,
-            height: 600,
-            parent: 'phaser-container',
-            scene: {
-                preload: preload,
-                create: create
-            }
-        };
+import './create.css';
 
-        const game = new Phaser.Game(config);
+const initialNodes = [
+  {
+    id: '1',
+    type: 'input',
+    data: { label: 'input node' },
+    position: { x: 250, y: 5 },
+  },
+];
 
-        function preload() {
-            // Usamos `this.load` en lugar de `this.load`
-            // `this` debe pasarse explícitamente a través de la función de flecha
-            this.load.atlas('bird', '../../assets/jupiter.png');
-        }
+let id = 0;
+const getId = () => `dndnode_${id++}`;
 
-        function create() {
-            // Usamos `this.add` en lugar de `this.add`
-            // `this` debe pasarse explícitamente a través de la función de flecha
-            this.add.text(400, 32, 'Click to get the next sprite', { color: '#00ff00' }).setOrigin(0.5, 0);
+const DnDFlow = () => {
+  const reactFlowWrapper = useRef(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
-            var animConfig = {
-                key: 'walk',
-                frames: this.anims.generateFrameNames('bird', { prefix: 'frame', end: 9 }),
-                repeat: -1,
-                showOnStart: true
-            };
+  const onConnect = useCallback(
+    (params) => setEdges((eds) => addEdge(params, eds)),
+    [],
+  );
 
-            this.anims.create(animConfig);
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
 
-            // Create a bunch of random sprites
-            const rect = new Phaser.Geom.Rectangle(64, 64, 672, 472);
+  const onDrop = useCallback(
+    (event) => {
+      event.preventDefault();
 
-            const group = this.add.group();
-            group.createMultiple({ key: 'bird', frame: 0, quantity: 64, visible: false, active: false });
+      const type = event.dataTransfer.getData('application/reactflow');
 
-            // Randomly position the sprites within the rectangle
-            Phaser.Actions.RandomRectangle(group.getChildren(), rect);
+      // check if the dropped element is valid
+      if (typeof type === 'undefined' || !type) {
+        return;
+      }
 
-            this.input.on('pointerdown', () => {
-                const bird = group.getFirstDead();
+      // reactFlowInstance.project was renamed to reactFlowInstance.screenToFlowPosition
+      // and you don't need to subtract the reactFlowBounds.left/top anymore
+      // details: https://reactflow.dev/whats-new/2023-11-10
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      const newNode = {
+        id: getId(),
+        type,
+        position,
+        data: { label: `${type} node` },
+      };
 
-                if (bird) {
-                    bird.active = true;
-                    bird.setDepth(bird.y);
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [reactFlowInstance],
+  );
 
-                    // As soon as we play the animation, the Sprite will be made visible
-                    bird.play('walk');
-                }
-            });
-        }
+  return (
+    <div className="dndflow">
+      <ReactFlowProvider>
+        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onInit={setReactFlowInstance}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            fitView
+          >
+            <Controls />
+          </ReactFlow>
+        </div>
+        <Sidebar />
+      </ReactFlowProvider>
+    </div>
+  );
+};
 
-        return () => {
-            game.destroy(true);
-        };
-    }, []); // Ejecutar solo una vez al montar el componente
-
-    return (
-        <div id="phaser-container"></div>
-    );
-}
-
-export default Create;
+export default DnDFlow;

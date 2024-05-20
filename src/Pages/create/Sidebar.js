@@ -1,27 +1,19 @@
+//import React from 'react';
 
-// import React from 'react';
-
-const component = () => {
+const Sidebar = () => {
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
   };
 
   return (
-    <aside>
+    <aside className='toolbar'>
       <div className="description">You can drag these nodes to the pane on the right.</div>
-      <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'input')} draggable>
-        Input Node
-      </div>
-      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'default')} draggable>
-        Default Node
-      </div>
-      <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'output')} draggable>
-        Output Node
+      <div className="dndnode umlNode" onDragStart={(event) => onDragStart(event, 'umlNode')} draggable>
+        Class Node
       </div>
     </aside>
   );
 };
 
-
-export default component;
+export default Sidebar;

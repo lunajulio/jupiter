@@ -1,21 +1,17 @@
-
 .menu-bar {
-     /* flex: 1; Ocupa el espacio restante */
-    margin-right: 20px; /* Espacio entre el menú y el contenido */
-    height: 88vh;
-    margin-top:2rem;
+    margin-right: 20px;
+    height: calc(100vh - 64px); /* Ajuste para el tamaño del header */
+    margin-top: 2rem;
     display: flex;
     flex-direction: column;
     gap: 15px;
     font-size: 1rem;
-    position: relative
+    position: relative;
 }
-
 
 .menu-container {
-    flex: 0 0 auto;
     width: 200px;
+    
 }
-
 
 

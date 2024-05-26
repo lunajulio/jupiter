@@ -1,36 +1,50 @@
-.sidebar{
-    color: #fff
+html, body, #root, .min-h-screen {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /* mantener todo estático*/
     
+}
+
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .row {
     display: flex;
-    width: 100%; /* Asegura que ocupe todo el ancho disponible */
-    box-sizing: border-box; /* Incluye padding y borde en el ancho total */
+    flex: 1;
 }
-
 
 .content-container {
     flex: 1;
-    padding: 20px; /* Añade un relleno interno */
-    background-color: #f0f2f5; /* Color de fondo para el contenedor */
+    overflow-y: auto; /* Permitir el desplazamiento solo en el contenido */
+    padding: 20px;
+    background-color: #f0f2f5;
 }
 
-.content {
-    padding: 20px; /* Añade un relleno interno */
-    background-color: #fff; /* Color de fondo para el contenido */
-    border-radius: 4px; /* Esquinas redondeadas */
-    margin: 20px; /* Añade un margen externo */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Añade una sombra para resaltar el contenido */
+.content-inner {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 4px;
+    margin: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* custom.css */
+.sidebar {
+    color: #fff;
+}
+
 .logo {
-    @apply text-2xl text-white font-bold ml-2;
+    font-size: 2rem;
+    color: white;
+    font-weight: bold;
+    margin-left: 2rem;
     font-family: 'Work Sans', sans-serif;
-  }
+}
 
-  .styled-table {
+.styled-table {
     width: 100%;
     border-collapse: collapse;
     margin: 1rem 0;
@@ -56,7 +70,7 @@
 .img-container {
     display: flex;
     justify-content: center;
-    margin: 1rem 0; /* Ajusta el margen según sea necesario */
+    margin: 1rem 0;
 }
-  
+
 

@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 import Menulist from '../../Components/menulist/Menulist';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkHtml from 'remark-html';
-import { Link } from 'react-router-dom';
 import './concept.css';
+import CustomHeader from '../../Components/header/Header';
 
-
-const { Sider, Content, Header } = Layout;
+const { Sider, Content } = Layout;
 
 const Concept = () => {
     const [content, setContent] = useState('');
@@ -28,6 +27,18 @@ const Concept = () => {
             case 'methods':
                 markdownFile = require('../../content/methods.md');
                 break;
+            case 'abstraction':
+                markdownFile = require('../../content/abstract.md');
+                break;
+            case 'encapsulation':
+                markdownFile = require('../../content/encapsulation.md');
+                break;
+            case 'inheritance':
+                markdownFile = require('../../content/inheritance.md');
+                break;
+            case 'polymorphism':
+                markdownFile = require('../../content/polymorphism.md');
+                break;
             default:
                 markdownFile = require('../../content/home.md');
         }
@@ -45,29 +56,14 @@ const Concept = () => {
     }, []);
 
     return (
-        <Layout className="min-h-screen">
-            <Header className="bg-dark text-white flex justify-between items-center p-0">
-                <div className="logo p-4">
-                    <h1 className="logo">JUPITER</h1>
-                </div>
-                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-                    <Menu.Item key="1">
-                        <Link to="/background">HOME</Link>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <Link to="/survive">SURVIVE</Link>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <Link to="/create">CREATIVE</Link>
-                    </Menu.Item>
-                </Menu>
-            </Header>
-            <Layout className="flex">
-                <Sider className="bg-dark">
+        <Layout className="min-h-screen layout-container">
+            <CustomHeader />
+            <Layout className="row">
+                <Sider className="menu-container">
                     <Menulist setContent={fetchMarkdown} />
                 </Sider>
-                <Content className="flex-1 p-4 bg-gray-100">
-                    <div className="p-4 bg-white rounded shadow-sm">
+                <Content className="content-container">
+                    <div className="content-inner">
                         <ReactMarkdown
                             remarkPlugins={[remarkGfm, remarkHtml]}
                             components={{

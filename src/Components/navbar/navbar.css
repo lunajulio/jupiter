@@ -1,76 +1,66 @@
 /* Navbar.css */
 
-.navbar__menu-item a {
-  color: rgb(255, 255, 255); /* Cambia el color de los enlaces a negro */
-  text-decoration: none; /* Elimina el subrayado de los enlaces */
-}
-
 .navbar {
- /* Frame 7 */
-
-    /* Auto layout */
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    gap: 237.56px;
-    z-index: 999;
-
-    position: absolute;
-    width: 1204.42px;
-    height: 48.12px;
-    left: 86.88px;
-    top: 30px;
-
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1%; /* Ajusta el padding según sea necesario */
+  width: 100%;
+  height: 50px;
+  background-color: transparent;
+  position: fixed;
+  top: 2%;
+  left: 0;
+  z-index: 999;
 }
 
 .navbar__logo {
   display: flex;
   align-items: center;
-  font-size: 30px; /* Tamaño de fuente */
-  /* cambiar color de la fuente */
+  font-size: 30px;
   color: #fff;
   font-family: 'Work Sans', sans-serif; 
-  /*poner la fuente con más negrita */
   font-weight: 500;
-  margin-left: 2%; /* Alinea el logo a la derecha */
 }
-
-
 
 .navbar__menu {
   display: flex;
-  justify-content: flex-start;
-  list-style-type: none; /* Elimina los estilos de lista predeterminados */
-  font-family: 'IBM Plex Sans', sans-serif; /* Cambiar la fuente */
-  color: #fff;
-
-      /* Menu */
-
-    width: 406.1px;
-    height: 23.1px;
-
-
-    /* Inside auto layout */
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-
+  justify-content: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
 }
 
 .navbar__menu-item {
-  margin-right: 20px;
+  margin: 0 10px;
   cursor: pointer;
 }
 
-.navbar__menu-item:last-child {
-  margin-right: 0;
+.navbar__menu-item a {
+  color: #fff;
+  text-decoration: none;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.navbar__user {
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.navbar__user span {
+  margin-left: 5px;
 }
 
 
+.navbar__points {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  color: #fff;
+}
 
-
-
-
+.navbar__points span {
+  margin-left: 3px;
+}

@@ -1,0 +1,20 @@
+.logo {
+    font-size: 30px; /* Tamaño de fuente */
+  /* cambiar color de la fuente */
+  color: #fff;
+  font-family: 'Work Sans', sans-serif; 
+  /*poner la fuente con más negrita */
+  font-weight: 500;
+}
+
+.bg-dark {
+    background-color: #001529;
+}
+
+.text-white {
+    color: white;
+}
+
+.custom-padding {
+    padding: 20px; /* Cambia el valor de padding según lo desees */
+}

@@ -1,41 +1,31 @@
+# Object Oriented Programming (OOPs) Concept in Java
 
 
 
 
-## Tarea de Música Rock Y Masas.
 
-**Nombre:** Luna Julio Martínez. 
+As the name suggests, [Object-Oriented Programming](https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-java/) or OOPs refers to languages that use objects in programming, they use objects as a primary source to implement what is to happen in the code. Objects are seen by the viewer or user, performing tasks assigned by you. Object-oriented programming aims to implement real-world entities like inheritance, hiding, polymorphism etc. in programming. The main aim of OOP is to bind together the data and the functions that operate on them so that no other part of the code can access this data except that function.
 
-**Código:** 200165451
+![Objects in Java](https://media.licdn.com/dms/image/D4E12AQFg8Ot_Ar7T3g/article-cover_image-shrink_600_2000/0/1666754754809?e=2147483647&v=beta&t=rk-DLD-3v_B9sqCJrR2zncV0NP_5TTZYLi8oHdW-D18)
 
-1. Qué tipo de música escuchas?
+
+Let us discuss prerequisites by polishing concepts of method declaration and message passing. Starting off with the method declaration, it consists of six components:
+
+1. [****Access Modifier****](https://www.geeksforgeeks.org/access-modifiers-java/): Defines the ****access type**** of the method i.e. from where it can be accessed in your application. In Java, there are 4 types of access specifiers: 
    
-   La verdad, escucho todo tipo de música, si me gusta una canción un género me atrevería a escuchar lo que sea, pero entre mis gustos más cercanos es el rock de los 80's - 90's y la salsa tropical (Willie Colón y Héctor Lavoe en especial). También me gusta mucho el trap en inglés y el rap.
+   - ****public:**** Accessible in all classes in your application.
+   - ****protected:**** Accessible within the package in which it is defined and in its ****subclass(es) (including subclasses declared outside the package)****.
+   - ****private:**** Accessible only within the class in which it is defined.
+   - ****default (declared/defined without using any modifier):**** Accessible within the same class and package within which its class is defined.
 
-2. Que importancia tiene la música en tu vida?
-   
-   La música en mi vida es indispensable, la música me motiva, me acompaña en cualquier momento y me hace ver que la vida no es tan dura como a veces se hace notar, una canción podría mejorar mi estado de ánimo repentinamente, la música siempre está en todas partes conmigo, desde que me levanto hasta que me duermo, tanto sí que en el bus tengo que ir con música o mi día se arruina, o cuando alguien me habla y estoy tan sumergida en ella es un poco molesto. No siguiera viviendo sin música sinceramente.
+2.  ****The return type****: The data type of the value returned by the method or void if it does not return a value.
 
-3. Cómo conoces la música que escuchas la música habitualmente (emisoras, amigos, recomendaciones, algoritmos, influencia familiares, etc)?
-   
-   La música la descubro gracias a recomendaciones de amigos mayoritariamente o algoritmos de las aplicaciones de música.
+3. ****Method Name****: The rules for field names apply to method names as well, but the convention is a little different.
 
-4. Escoge una canción muy importante para ti, que crees que vas a seguir escuchando durante 10 a 20 años. Explica tus razones. Cuenta como llegaste a esta canción y por qué hace parte de tu vida.
-   
-   Canción: [Michael Jackson - You Rock My World (Official Video - Shortened Version) - YouTube](https://www.youtube.com/watch?v=g4tpuu-Up90)
-   
-   Esta canción es importante para mí porque en los momentos dificiles al escucharla me hace sentir como si estuviera viviendo mis mayores sueños, me hace sentir bien conmigo misma, me da ganas de seguir disfrutando de la vida al máximo, además de que es de Michael Jackson (me hubiera encantado escuchar esta canción en vivo interpretada por él) y también me encanta el video de la canción y me identifico con la chica que es protagonista. Esta canción también expresa mis sentimientos por alguien que me hace muy feliz. Sin duda nunca dejaría de escucharla.
+4. ****Parameter list****: Comma-separated list of the input parameters that are defined, preceded by their data type, within the enclosed parentheses. If there are no parameters, you must use empty parentheses ().
 
-5. Cuál es tu artista musical o agrupación favorita y que es lo más te gusta de eso. 
-   
-   En realidad tengo dos, Michael Jackson porque me parece que su estilo musical es incomparable y su legado nunca se podrá olvidar, sus canciones son como una dosis de dopamina para mí, me dan ganas de bailar y eso me encanta, en mi playlist diaria nunca falta una de sus canciones. El otro es la banda de Bon Jovi, me encanta la letra de sus canciones y la mezcla de rock-pop también me encanta, sus canciones me surmergen en un estado de reflexión sentimental.
+5. ****Exception list****: The exceptions you expect the method to throw. You can specify these exception(s).
 
-6. Escoge un video clip que te guste mucho y explica por qué.
-   
-   Video: [Michael Jackson - Smooth Criminal (Official Video) - YouTube](https://www.youtube.com/watch?v=h_D3VFfhvs4)
-   
-   Este video es como una representación de la felicidad que quiero tener, me encanta el ritmo de la canción, la historia que cuenta a través de esta, la coregrafía... simplemente una obra de arte, además me eriza cada vez que lo veo, me emociona mucho.
+6. ****Method body****: It is the block of code, enclosed between braces, that you need to execute to perform your intended operations.
 
-7. Para ti es importante la imagen de un artista (videos, atuendos, declaraciones públicas, explica tu respuesta) o sea, dependiendo de la forma de ser.
-   
-   De cierta forma, la forma de ser de los artistas influye en si te gusta o no, aunque pienso que se debe separar su música de su vida persona, no sé. La verdad los artitas que sigo es solo por su música.
+

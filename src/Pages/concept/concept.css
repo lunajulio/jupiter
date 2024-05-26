@@ -29,5 +29,34 @@
     @apply text-2xl text-white font-bold ml-2;
     font-family: 'Work Sans', sans-serif;
   }
+
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+}
+
+.styled-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.styled-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.img-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0; /* Ajusta el margen según sea necesario */
+}
   
 

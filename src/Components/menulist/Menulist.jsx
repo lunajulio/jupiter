@@ -15,15 +15,24 @@ const Menulist = ({ setContent }) => {
                 }}
             >
                 <Menu.Item key="home" icon={<HomeOutlined />}>
-                    Home
+                    OOPs
                 </Menu.Item>
-                <Menu.SubMenu key="sub1" icon={<HomeOutlined />} title="Concept">
-                    <Menu.Item key="concept1">Concept 1</Menu.Item>
-                    <Menu.Item key="concept2">Concept 2</Menu.Item>
+                <Menu.Item key="class" icon={<HomeOutlined />}>
+                    Class
+                </Menu.Item>
+                <Menu.Item key="object" icon={<HomeOutlined />}>
+                    Object
+                </Menu.Item>
+                <Menu.Item key="methods" icon={<HomeOutlined />}>
+                    Methods
+                </Menu.Item>
+
+                <Menu.SubMenu key="sub1" icon={<HomeOutlined />} title="Pillars of OOPs">
+                    <Menu.Item key="abstraction">Abstraction</Menu.Item>
+                    <Menu.Item key="encapsulation">Encapsulation</Menu.Item>
+                    <Menu.Item key="inheritance">Inheritance</Menu.Item>
+                    <Menu.Item key="polymorphism">Polymorphism</Menu.Item>
                 </Menu.SubMenu>
-                <Menu.Item key="example" icon={<HomeOutlined />}>
-                    Example
-                </Menu.Item>
                 {/* Agrega más opciones según sea necesario */}
             </Menu>
         </div>

@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { UserOutlined, StarOutlined } from '@ant-design/icons';
 
 const Navbar = () => {
+  const username = localStorage.getItem('username');
+  const points = localStorage.getItem('points');
+
   return (
       <div className="navbar">
         <div className="navbar__logo">
@@ -17,10 +20,10 @@ const Navbar = () => {
 
         <div className="navbar__user">
           <UserOutlined />
-          <span>USER</span>
+          <span>{username}</span>
           <div className="navbar__points">
             <StarOutlined />
-            <span>100</span>
+            <span>{points}</span>
           </div>
         </div>
       </div>

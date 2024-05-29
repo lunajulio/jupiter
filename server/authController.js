@@ -11,7 +11,6 @@ function auth(req, res) {
         if (err) return res.status(500).send('Server error');
         conn.query('SELECT * FROM users WHERE username = ?', [data.username], (err, userdata) => {
             if (err) return res.status(500).send('Server error');
-            console.log(userdata);
             if (userdata.length > 0) {
                 userdata.forEach(element => {
                     bcrypt.compare(data.password, element.Password, (err, match) => {
@@ -48,7 +47,14 @@ function storeUser(req, res) {
                     data.password = hash;
                     conn.query('INSERT INTO users SET ?', [data], (err, rows) => {
                         if (err) return res.status(500).send('Server error');
-                        res.send({ success: true, message: 'User registered' });
+                        conn.query('INSERT INTO points SET ?', {id: rows.insertId, points: 0}, (err, result) => {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log('User points inserted successfully');
+                                res.send({ success: true, message: 'User registered' });
+                            }
+                        });
                     });
                 }).catch(err => {
                     res.status(500).send('Server error');

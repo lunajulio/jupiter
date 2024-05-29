@@ -16,7 +16,13 @@ function auth(req, res) {
                     bcrypt.compare(data.password, element.Password, (err, match) => {
                         if (err) return res.status(500).send('Server error');
                         if (match) {
-                            res.send({ success: true, message: 'Login successful' });
+                            conn.query('SELECT * FROM points WHERE id = ?', [element.id], (err, points) => {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    res.send({ success: true, message: 'Login successful', username: data.username, points: points[0].points});
+                                }
+                            });
                         } else {
                             res.send({ success: false, message: 'Invalid credentials' });
                         }
@@ -51,7 +57,6 @@ function storeUser(req, res) {
                             if (err) {
                                 console.log(err);
                             } else {
-                                console.log('User points inserted successfully');
                                 res.send({ success: true, message: 'User registered' });
                             }
                         });

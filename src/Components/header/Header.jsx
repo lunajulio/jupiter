@@ -7,6 +7,9 @@ import { UserOutlined, StarOutlined } from '@ant-design/icons';
 const { Header } = Layout;
 
 const CustomHeader = () => {
+    const username = localStorage.getItem('username');
+    const points = localStorage.getItem('points');
+
     return (
         <Header className="bg-dark text-white flex justify-between items-center p-0 custom-padding">
             <div className="logo p-4">
@@ -26,10 +29,10 @@ const CustomHeader = () => {
 
             <div className="navbar__user">
             <UserOutlined />
-            <span>USER</span>
+            <span>{username}</span>
             <div className="navbar__points">
                 <StarOutlined />
-                <span>100</span>
+                <span>{points}</span>
             </div>
             </div>
         </Header>

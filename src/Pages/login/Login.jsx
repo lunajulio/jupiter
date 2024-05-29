@@ -21,7 +21,11 @@ function Login() {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:5000/api/login', { username, password });
-            alert(response.data.message);
+            if(response.data.success) {
+                localStorage.setItem('username', response.data.username);
+                localStorage.setItem('points', response.data.points);
+                window.location.href = '/background';
+            }
         } catch (error) {
             console.error('Error during login', error);
         }
@@ -32,6 +36,9 @@ function Login() {
         try {
             const response = await axios.post('http://localhost:5000/api/register', { email, username, password });
             alert(response.data.message);
+            if(response.data.success) {
+                loginLink();
+            }
         } catch (error) {
             console.error('Error during registration', error);
         }

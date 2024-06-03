@@ -53,7 +53,6 @@
   margin-left: 5px;
 }
 
-
 .navbar__points {
   display: flex;
   align-items: center;
@@ -63,4 +62,20 @@
 
 .navbar__points span {
   margin-left: 3px;
+}
+
+.navbar__logout {
+  background-color: #ff4d4f;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 16px;
+  margin-left: 10px;
+  border-radius: 4px;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.navbar__logout:hover {
+  background-color: #ff7875;
 }

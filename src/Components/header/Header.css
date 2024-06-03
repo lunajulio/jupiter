@@ -1,10 +1,10 @@
 .logo {
     font-size: 30px; /* Tamaño de fuente */
-  /* cambiar color de la fuente */
-  color: #fff;
-  font-family: 'Work Sans', sans-serif; 
-  /*poner la fuente con más negrita */
-  font-weight: 500;
+    /* cambiar color de la fuente */
+    color: #fff;
+    font-family: 'Work Sans', sans-serif; 
+    /* poner la fuente con más negrita */
+    font-weight: 500;
 }
 
 .bg-dark {
@@ -18,3 +18,37 @@
 .custom-padding {
     padding: 20px; /* Cambia el valor de padding según lo desees */
 }
+
+.navbar__user {
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+
+.navbar__points {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    color: #fff;
+}
+
+.navbar__points span {
+    margin-left: 3px;
+}
+
+.navbar__logout {
+    background-color: #ff4d4f;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 16px;
+    margin-left: 10px;
+    border-radius: 4px;
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.navbar__logout:hover {
+    background-color: #ff7875;
+}
+

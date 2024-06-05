@@ -14,7 +14,7 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import Sidebar from './Sidebar.js';
+//import Sidebar from './Sidebar.js';
 //import ResizableUMLNodeSelected from './ResizableUMLNodeSelected.jsx';
 import CustomEdge from './CustomEdgeGer.jsx';
 import { initialEdges, initialNodes } from './nodes-and-edges.jsx';
@@ -230,6 +230,13 @@ const DnDFlow = () => {
     }
   }, [selectedEdge, setEdges]);
 
+
+  const onDragStart = (event, nodeType) => {
+    event.dataTransfer.setData('application/reactflow', nodeType);
+    event.dataTransfer.effectAllowed = 'move';
+  };
+  
+
   return (
     <div className="dndflow">
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
@@ -258,10 +265,17 @@ const DnDFlow = () => {
           <Background variant={BackgroundVariant.Cross} gap={50} />
         </ReactFlow>
       </div>
-      <Sidebar />
-      <div className="controls">
-        <button onClick={() => addArrowToEdge()}>Target</button> {/* Botón para agregar flecha al target */}
+      
+      <aside className='toolbar'>
+        <div className="description">You can drag these nodes to the pane on the right.</div>
+        <div className="dndnode umlNode" onDragStart={(event) => onDragStart(event, 'umlNode')} draggable>
+          Class Node
+        </div>
+        <div className="target">
+        <button className='target-button' onClick={() => addArrowToEdge()}>Target</button> {/* Botón para agregar flecha al target */}
       </div>
+      </aside>
+      
     </div>
   );
 };

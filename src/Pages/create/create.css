@@ -31,6 +31,26 @@
   background-color: #e8e2b5;
 }
 
+.target {
+  height: 20px;
+  padding: 4px;
+  border: 1px solid #1a192b;
+  border-radius: 5px;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background-color: #e8e2b5;
+}
+
+.target-button{
+  width: 100%;
+}
+
+
 .dndflow .dndnode.input {
   background-color: #bbe8b5;
 }
@@ -86,14 +106,18 @@
   height: auto;
   flex-wrap: nowrap;
   justify-content: space-around;
+  height: 20%;
 }
 
 .uml-attributes, .uml-methods {
   padding: 0.5em;
   border-bottom: 1px solid black;
   width: 100%;
-  height: auto;
-  flex-grow: 1; /* Permitir que estos elementos crezcan */
+  height: 50%;
+}
+
+.uml-cuerpo {
+  height: 80%;
 }
 
 .uml-attributes div, .uml-methods div {
@@ -107,6 +131,15 @@
   background: transparent;
   resize: none;
   overflow: hidden;
+}
+.uml-textarea-clase {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  resize: none;
+  overflow: hidden;
+  text-align: center;
 }
 
 .react-resizable {

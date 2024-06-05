@@ -136,3 +136,37 @@
 .edgebutton:hover {
   background: darkred;
 }
+
+.react-flow__edge-path {
+  stroke: #222;
+  stroke-width: 3;
+  fill: none;
+}
+
+.react-flow__edge-marker {
+  fill: #26c45a;
+}
+
+.react-flow__edge {
+  stroke: #222;
+  stroke-width: 2px;
+  marker-start: url(#arrow);
+  marker-end: url(#arrow);
+}
+
+.marker-arrow {
+  fill: #d4c92b;
+}
+
+/* botones nuevos */
+.controls {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.controls button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 5px;
+  cursor: pointer;
+}

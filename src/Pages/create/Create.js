@@ -4,6 +4,9 @@ import ReactFlow, {
   addEdge,
   useNodesState,
   useEdgesState,
+  updateEdge,
+  MarkerType,
+  ConnectionMode,
   Controls,
   useStoreApi,
   Background,
@@ -12,20 +15,24 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 
 import Sidebar from './Sidebar.js';
-import ResizableUMLNodeSelected from './ResizableUMLNodeSelected.jsx';
-import CustomEdge from './CustomEdge.jsx';
+//import ResizableUMLNodeSelected from './ResizableUMLNodeSelected.jsx';
+import CustomEdge from './CustomEdgeGer.jsx';
 import { initialEdges, initialNodes } from './nodes-and-edges.jsx';
 import './create.css';
 
-const MIN_DISTANCE = 150;
+import CustomNode from './CustomNode.jsx';
+
+const MIN_DISTANCE = 0;
 
 const nodeTypes = {
-  umlNode: ResizableUMLNodeSelected,
+  //umlNode: ResizableUMLNodeSelected,
+  newNode: CustomNode,
 };
 
 const edgeTypes = {
   custom: CustomEdge,
 };
+
 
 const getId = (() => {
   let id = 0;
@@ -38,10 +45,15 @@ const DnDFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [selectedEdge, setSelectedEdge] = useState(null);
+  const edgeUpdateSuccessful = useRef(true);
 
+
+  const fitViewOptions = { padding: 4 };
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge({ ...params, type: 'custom' }, eds)),
-    [setEdges],
+    (params) =>
+      setEdges((eds) => addEdge({ ...params, type: 'custom', markerEnd: { type: MarkerType.Arrow }}, eds)),
+    []
   );
 
   const getClosestEdge = useCallback((node) => {
@@ -98,6 +110,7 @@ const DnDFlow = () => {
             (ne) =>
               ne.source === closeEdge.source && ne.target === closeEdge.target,
           )
+
         ) {
           closeEdge.className = 'temp';
           nextEdges.push(closeEdge);
@@ -141,11 +154,11 @@ const DnDFlow = () => {
     (event) => {
       event.preventDefault();
 
-      const type = event.dataTransfer.getData('application/reactflow');
+      /*const type = event.dataTransfer.getData('application/reactflow');
 
       if (typeof type === 'undefined' || !type) {
         return;
-      }
+      }*/
 
       const position = reactFlowInstance.project({
         x: event.clientX,
@@ -154,7 +167,8 @@ const DnDFlow = () => {
 
       const newNode = {
         id: getId(),
-        type,
+        type: 'newNode',
+        dragHandle: '.custom-drag-handle',
         position,
         data: {
           label: 'Class',
@@ -176,6 +190,46 @@ const DnDFlow = () => {
     [reactFlowInstance],
   );
 
+  const onEdgeUpdateStart = useCallback(() => {
+    edgeUpdateSuccessful.current = false;
+  }, []);
+
+  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+    edgeUpdateSuccessful.current = true;
+    setEdges((els) => updateEdge(oldEdge, newConnection, els));
+  }, []);
+
+  const onEdgeUpdateEnd = useCallback((_, edge) => {
+    if (!edgeUpdateSuccessful.current) {
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    }
+
+    edgeUpdateSuccessful.current = true;
+  }, []);
+
+  const onEdgeClick = useCallback((event, edge) => {
+    setSelectedEdge(edge.id); // Guardar el id del borde seleccionado
+  }, []);
+
+
+  const addArrowToEdge = useCallback(() => {
+    if (selectedEdge) {
+      setEdges((eds) =>
+        eds.map((edge) => {
+          if (edge.id === selectedEdge) {
+            console.log("Type: " + edge.markerEnd.type);
+            if (edge.markerEnd.type === 'arrow') {
+              return { ...edge, markerEnd: { type: '' }, };
+            } else {
+              return { ...edge, markerEnd: { type: 'arrow' }, };
+            }
+          }
+          return edge;
+        }),
+      );
+    }
+  }, [selectedEdge, setEdges]);
+
   return (
     <div className="dndflow">
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
@@ -190,7 +244,13 @@ const DnDFlow = () => {
           onInit={setReactFlowInstance}
           onDrop={onDrop}
           onDragOver={onDragOver}
+          onEdgeUpdate={onEdgeUpdate}
+          onEdgeUpdateStart={onEdgeUpdateStart}
+          onEdgeUpdateEnd={onEdgeUpdateEnd}
+          onEdgeClick={onEdgeClick}
+          connectionMode={ConnectionMode.Loose}
           fitView
+          fitViewOptions={fitViewOptions}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
         >
@@ -199,6 +259,9 @@ const DnDFlow = () => {
         </ReactFlow>
       </div>
       <Sidebar />
+      <div className="controls">
+        <button onClick={() => addArrowToEdge()}>Target</button> {/* Botón para agregar flecha al target */}
+      </div>
     </div>
   );
 };

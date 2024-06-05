@@ -11,11 +11,10 @@ import ReactFlow, {
   useStoreApi,
   Background,
   BackgroundVariant,
+  useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-//import Sidebar from './Sidebar.js';
-//import ResizableUMLNodeSelected from './ResizableUMLNodeSelected.jsx';
 import CustomEdge from './CustomEdgeGer.jsx';
 import { initialEdges, initialNodes } from './nodes-and-edges.jsx';
 import './create.css';
@@ -25,14 +24,12 @@ import CustomNode from './CustomNode.jsx';
 const MIN_DISTANCE = 0;
 
 const nodeTypes = {
-  //umlNode: ResizableUMLNodeSelected,
   newNode: CustomNode,
 };
 
 const edgeTypes = {
   custom: CustomEdge,
 };
-
 
 const getId = (() => {
   let id = 0;
@@ -47,12 +44,11 @@ const DnDFlow = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [selectedEdge, setSelectedEdge] = useState(null);
   const edgeUpdateSuccessful = useRef(true);
-
+  const { setViewport } = useReactFlow();
 
   const fitViewOptions = { padding: 4 };
   const onConnect = useCallback(
-    (params) =>
-      setEdges((eds) => addEdge({ ...params, type: 'custom', markerEnd: { type: MarkerType.Arrow }}, eds)),
+    (params) => setEdges((eds) => addEdge({ ...params, type: 'custom', markerEnd: { type: MarkerType.Arrow }}, eds)),
     []
   );
 
@@ -154,12 +150,6 @@ const DnDFlow = () => {
     (event) => {
       event.preventDefault();
 
-      /*const type = event.dataTransfer.getData('application/reactflow');
-
-      if (typeof type === 'undefined' || !type) {
-        return;
-      }*/
-
       const position = reactFlowInstance.project({
         x: event.clientX,
         y: event.clientY,
@@ -211,7 +201,6 @@ const DnDFlow = () => {
     setSelectedEdge(edge.id); // Guardar el id del borde seleccionado
   }, []);
 
-
   const addArrowToEdge = useCallback(() => {
     if (selectedEdge) {
       setEdges((eds) =>
@@ -230,12 +219,43 @@ const DnDFlow = () => {
     }
   }, [selectedEdge, setEdges]);
 
-
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
   };
-  
+
+  const downloadJson = (content, fileName) => {
+    const blob = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const onSave = useCallback(() => {
+    if (reactFlowInstance) {
+      const flow = reactFlowInstance.toObject();
+      downloadJson(flow, 'flow.json');
+    }
+  }, [reactFlowInstance]);
+
+  const onRestore = useCallback((event) => {
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      const flow = JSON.parse(e.target.result);
+      if (flow) {
+        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+        setNodes(flow.nodes || []);
+        setEdges(flow.edges || []);
+        setViewport({ x, y, zoom });
+      }
+    };
+    fileReader.readAsText(event.target.files[0]);
+  }, [setNodes, setViewport]);
 
   return (
     <div className="dndflow">
@@ -265,17 +285,20 @@ const DnDFlow = () => {
           <Background variant={BackgroundVariant.Cross} gap={50} />
         </ReactFlow>
       </div>
-      
+
       <aside className='toolbar'>
         <div className="description">You can drag these nodes to the pane on the right.</div>
         <div className="dndnode umlNode" onDragStart={(event) => onDragStart(event, 'umlNode')} draggable>
           Class Node
         </div>
         <div className="target">
-        <button className='target-button' onClick={() => addArrowToEdge()}>Target</button> {/* Botón para agregar flecha al target */}
-      </div>
+          <button className='target-button' onClick={() => addArrowToEdge()}>Target</button> {/* Botón para agregar flecha al target */}
+        </div>
+        <div className="controls">
+          <button onClick={onSave}>Save</button>
+          <input type="file" accept=".json" onChange={onRestore} />
+        </div>
       </aside>
-      
     </div>
   );
 };

@@ -40,7 +40,7 @@ const CustomNode = ({selected}) => {
             <div style={labelStyle}>
                 <div className="custom-drag-handle" style={dragHandleStyle}>
                     <div className="uml-header"><textarea name="clase" className="uml-textarea-clase"
-                                autoComplete="off"> Clase </textarea></div>
+                                autoComplete="off"> clase </textarea></div>
                     <div className='uml-cuerpo'>
                         <div className="uml-attributes">
                             <textarea name="atributos" className="uml-textarea"

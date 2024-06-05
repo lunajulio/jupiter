@@ -1,72 +1,289 @@
-import { useEffect } from 'react';
-import Phaser from 'phaser';
+import { useState, useRef, useCallback } from 'react';
+import ReactFlow, {
+  ReactFlowProvider,
+  addEdge,
+  useNodesState,
+  useEdgesState,
+  updateEdge,
+  MarkerType,
+  ConnectionMode,
+  Controls,
+  useStoreApi,
+  Background,
+  BackgroundVariant,
+} from 'reactflow';
+import 'reactflow/dist/style.css';
 
-function Create() {
+//import Sidebar from './Sidebar.js';
+//import ResizableUMLNodeSelected from './ResizableUMLNodeSelected.jsx';
+import CustomEdge from './CustomEdgeGer.jsx';
+import { initialEdges, initialNodes } from './nodes-and-edges.jsx';
+import './create.css';
 
-    useEffect(() => {
-        const config = {
-            type: Phaser.AUTO,
-            width: 800,
-            height: 600,
-            parent: 'phaser-container',
-            scene: {
-                preload: preload,
-                create: create
-            }
-        };
+import CustomNode from './CustomNode.jsx';
 
-        const game = new Phaser.Game(config);
+const MIN_DISTANCE = 0;
 
-        function preload() {
-            // Usamos `this.load` en lugar de `this.load`
-            // `this` debe pasarse explícitamente a través de la función de flecha
-            this.load.atlas('bird', '../../assets/jupiter.png');
+const nodeTypes = {
+  //umlNode: ResizableUMLNodeSelected,
+  newNode: CustomNode,
+};
+
+const edgeTypes = {
+  custom: CustomEdge,
+};
+
+
+const getId = (() => {
+  let id = 0;
+  return () => `dndnode_${id++}`;
+})();
+
+const DnDFlow = () => {
+  const store = useStoreApi();
+  const reactFlowWrapper = useRef(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [selectedEdge, setSelectedEdge] = useState(null);
+  const edgeUpdateSuccessful = useRef(true);
+
+
+  const fitViewOptions = { padding: 4 };
+  const onConnect = useCallback(
+    (params) =>
+      setEdges((eds) => addEdge({ ...params, type: 'custom', markerEnd: { type: MarkerType.Arrow }}, eds)),
+    []
+  );
+
+  const getClosestEdge = useCallback((node) => {
+    const { nodeInternals } = store.getState();
+    const storeNodes = Array.from(nodeInternals.values());
+
+    const closestNode = storeNodes.reduce(
+      (res, n) => {
+        if (n.id !== node.id) {
+          const dx = n.positionAbsolute.x - node.positionAbsolute.x;
+          const dy = n.positionAbsolute.y - node.positionAbsolute.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+
+          if (d < res.distance && d < MIN_DISTANCE) {
+            res.distance = d;
+            res.node = n;
+          }
         }
 
-        function create() {
-            // Usamos `this.add` en lugar de `this.add`
-            // `this` debe pasarse explícitamente a través de la función de flecha
-            this.add.text(400, 32, 'Click to get the next sprite', { color: '#00ff00' }).setOrigin(0.5, 0);
-
-            var animConfig = {
-                key: 'walk',
-                frames: this.anims.generateFrameNames('bird', { prefix: 'frame', end: 9 }),
-                repeat: -1,
-                showOnStart: true
-            };
-
-            this.anims.create(animConfig);
-
-            // Create a bunch of random sprites
-            const rect = new Phaser.Geom.Rectangle(64, 64, 672, 472);
-
-            const group = this.add.group();
-            group.createMultiple({ key: 'bird', frame: 0, quantity: 64, visible: false, active: false });
-
-            // Randomly position the sprites within the rectangle
-            Phaser.Actions.RandomRectangle(group.getChildren(), rect);
-
-            this.input.on('pointerdown', () => {
-                const bird = group.getFirstDead();
-
-                if (bird) {
-                    bird.active = true;
-                    bird.setDepth(bird.y);
-
-                    // As soon as we play the animation, the Sprite will be made visible
-                    bird.play('walk');
-                }
-            });
-        }
-
-        return () => {
-            game.destroy(true);
-        };
-    }, []); // Ejecutar solo una vez al montar el componente
-
-    return (
-        <div id="phaser-container"></div>
+        return res;
+      },
+      {
+        distance: Number.MAX_VALUE,
+        node: null,
+      },
     );
-}
 
-export default Create;
+    if (!closestNode.node) {
+      return null;
+    }
+
+    const closeNodeIsSource =
+      closestNode.node.positionAbsolute.x < node.positionAbsolute.x;
+
+    return {
+      id: closeNodeIsSource
+        ? `${closestNode.node.id}-${node.id}`
+        : `${node.id}-${closestNode.node.id}`,
+      source: closeNodeIsSource ? closestNode.node.id : node.id,
+      target: closeNodeIsSource ? node.id : closestNode.node.id,
+    };
+  }, [store]);
+
+  const onNodeDrag = useCallback(
+    (_, node) => {
+      const closeEdge = getClosestEdge(node);
+
+      setEdges((es) => {
+        const nextEdges = es.filter((e) => e.className !== 'temp');
+
+        if (
+          closeEdge &&
+          !nextEdges.find(
+            (ne) =>
+              ne.source === closeEdge.source && ne.target === closeEdge.target,
+          )
+
+        ) {
+          closeEdge.className = 'temp';
+          nextEdges.push(closeEdge);
+        }
+
+        return nextEdges;
+      });
+    },
+    [getClosestEdge, setEdges],
+  );
+
+  const onNodeDragStop = useCallback(
+    (_, node) => {
+      const closeEdge = getClosestEdge(node);
+
+      setEdges((es) => {
+        const nextEdges = es.filter((e) => e.className !== 'temp');
+
+        if (
+          closeEdge &&
+          !nextEdges.find(
+            (ne) =>
+              ne.source === closeEdge.source && ne.target === closeEdge.target,
+          )
+        ) {
+          nextEdges.push(closeEdge);
+        }
+
+        return nextEdges;
+      });
+    },
+    [getClosestEdge],
+  );
+
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const onDrop = useCallback(
+    (event) => {
+      event.preventDefault();
+
+      /*const type = event.dataTransfer.getData('application/reactflow');
+
+      if (typeof type === 'undefined' || !type) {
+        return;
+      }*/
+
+      const position = reactFlowInstance.project({
+        x: event.clientX,
+        y: event.clientY,
+      });
+
+      const newNode = {
+        id: getId(),
+        type: 'newNode',
+        dragHandle: '.custom-drag-handle',
+        position,
+        data: {
+          label: 'Class',
+          attributes: [
+            '+ attribute1:type = defaultValue',
+            '+ attribute2:type',
+            '- attribute3:type',
+          ],
+          methods: [
+            '+ operation1(params):returnType',
+            '- operation2(params)',
+            '- operation3()',
+          ],
+        },
+      };
+
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [reactFlowInstance],
+  );
+
+  const onEdgeUpdateStart = useCallback(() => {
+    edgeUpdateSuccessful.current = false;
+  }, []);
+
+  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+    edgeUpdateSuccessful.current = true;
+    setEdges((els) => updateEdge(oldEdge, newConnection, els));
+  }, []);
+
+  const onEdgeUpdateEnd = useCallback((_, edge) => {
+    if (!edgeUpdateSuccessful.current) {
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    }
+
+    edgeUpdateSuccessful.current = true;
+  }, []);
+
+  const onEdgeClick = useCallback((event, edge) => {
+    setSelectedEdge(edge.id); // Guardar el id del borde seleccionado
+  }, []);
+
+
+  const addArrowToEdge = useCallback(() => {
+    if (selectedEdge) {
+      setEdges((eds) =>
+        eds.map((edge) => {
+          if (edge.id === selectedEdge) {
+            console.log("Type: " + edge.markerEnd.type);
+            if (edge.markerEnd.type === 'arrow') {
+              return { ...edge, markerEnd: { type: '' }, };
+            } else {
+              return { ...edge, markerEnd: { type: 'arrow' }, };
+            }
+          }
+          return edge;
+        }),
+      );
+    }
+  }, [selectedEdge, setEdges]);
+
+
+  const onDragStart = (event, nodeType) => {
+    event.dataTransfer.setData('application/reactflow', nodeType);
+    event.dataTransfer.effectAllowed = 'move';
+  };
+  
+
+  return (
+    <div className="dndflow">
+      <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onNodeDrag={onNodeDrag}
+          onNodeDragStop={onNodeDragStop}
+          onConnect={onConnect}
+          onInit={setReactFlowInstance}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          onEdgeUpdate={onEdgeUpdate}
+          onEdgeUpdateStart={onEdgeUpdateStart}
+          onEdgeUpdateEnd={onEdgeUpdateEnd}
+          onEdgeClick={onEdgeClick}
+          connectionMode={ConnectionMode.Loose}
+          fitView
+          fitViewOptions={fitViewOptions}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+        >
+          <Controls />
+          <Background variant={BackgroundVariant.Cross} gap={50} />
+        </ReactFlow>
+      </div>
+      
+      <aside className='toolbar'>
+        <div className="description">You can drag these nodes to the pane on the right.</div>
+        <div className="dndnode umlNode" onDragStart={(event) => onDragStart(event, 'umlNode')} draggable>
+          Class Node
+        </div>
+        <div className="target">
+        <button className='target-button' onClick={() => addArrowToEdge()}>Target</button> {/* Botón para agregar flecha al target */}
+      </div>
+      </aside>
+      
+    </div>
+  );
+};
+
+const WrappedDnDFlow = () => (
+  <ReactFlowProvider>
+    <DnDFlow />
+  </ReactFlowProvider>
+);
+
+export default WrappedDnDFlow;

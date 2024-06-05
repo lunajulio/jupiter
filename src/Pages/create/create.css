@@ -1,0 +1,205 @@
+.dndflow {
+  flex-direction: column;
+  display: flex;
+  flex-grow: 1;
+  height: 800px;
+}
+
+.dndflow aside {
+  border-right: 1px solid #b49dd4;
+  padding: 15px 10px;
+  font-size: 12px;
+  background: #b49dd4;
+}
+
+.dndflow aside .description {
+  margin-bottom: 10px;
+}
+
+.dndflow .dndnode {
+  height: 20px;
+  padding: 4px;
+  border: 1px solid #1a192b;
+  border-radius: 5px;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background-color: #e8e2b5;
+}
+
+.target {
+  height: 20px;
+  padding: 4px;
+  border: 1px solid #1a192b;
+  border-radius: 5px;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background-color: #e8e2b5;
+}
+
+.target-button{
+  width: 100%;
+}
+
+
+.dndflow .dndnode.input {
+  background-color: #bbe8b5;
+}
+
+.dndflow .dndnode.output {
+  background-color: #a9c7e5;
+}
+
+.dndflow .reactflow-wrapper {
+  flex-grow: 1;
+  height: 100%;
+}
+
+.dndflow .selectall {
+  margin-top: 10px;
+}
+
+@media screen and (min-width: 768px) {
+  .dndflow {
+    flex-direction: row;
+  }
+
+  .dndflow aside {
+    width: 20%;
+    max-width: 250px;
+  }
+}
+
+.uml-node {
+  border: 1px solid black;
+  background-color: #a9c7e5;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: left;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  width: 100%; /* Ancho por defecto */
+  height: 100%;
+  font-size: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.uml-header {
+  background-color: #4a76a8;
+  color: white;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 0.5em;
+  font-weight: bold;
+  border-bottom: 1px solid black;
+  width: 100%;
+  height: auto;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  height: 20%;
+}
+
+.uml-attributes, .uml-methods {
+  padding: 0.5em;
+  border-bottom: 1px solid black;
+  width: 100%;
+  height: 50%;
+}
+
+.uml-cuerpo {
+  height: 80%;
+}
+
+.uml-attributes div, .uml-methods div {
+  margin: 2px 0;
+}
+
+.uml-textarea {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  resize: none;
+  overflow: hidden;
+}
+.uml-textarea-clase {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  resize: none;
+  overflow: hidden;
+  text-align: center;
+}
+
+.react-resizable {
+  position: absolute;
+}
+
+.react-resizable-handle {
+  background: #a9c7e5;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
+}
+
+.edgebutton {
+  background: red;
+  border: none;
+  height: 20px;
+  width: 20px;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.edgebutton:hover {
+  background: darkred;
+}
+
+.react-flow__edge-path {
+  stroke: #222;
+  stroke-width: 3;
+  fill: none;
+}
+
+.react-flow__edge-marker {
+  fill: #26c45a;
+}
+
+.react-flow__edge {
+  stroke: #222;
+  stroke-width: 2px;
+  marker-start: url(#arrow);
+  marker-end: url(#arrow);
+}
+
+.marker-arrow {
+  fill: #d4c92b;
+}
+
+/* botones nuevos */
+.controls {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.controls button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 5px;
+  cursor: pointer;
+}

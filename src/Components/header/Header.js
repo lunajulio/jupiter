@@ -1,6 +1,6 @@
 import { Layout, Menu, Button } from 'antd';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate en lugar de useHistory
-import './header.css'; // Si tienes estilos específicos para el header
+import './Header.css'; // Si tienes estilos específicos para el header
 import { UserOutlined, StarOutlined } from '@ant-design/icons';
 
 const { Header } = Layout;

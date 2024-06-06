@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { Handle, Position, NodeResizer } from 'reactflow';
 import PropTypes from 'prop-types';
 
@@ -21,7 +21,6 @@ const dragHandleStyle = {
     width: '100%',
     height: '100%',
     backgroundColor: 'transparent',
-    //borderRadius: '10%',
     position: 'absolute',
     top: 0,
     right: 0,
@@ -31,27 +30,87 @@ const dragHandleStyle = {
 const handleInvisibleStyle = {
     opacity: 0,
     pointerEvents: 'none',
-  };
+};
 
-const CustomNode = ({selected}) => {
+const CustomNode = ({ selected, data, id }) => {
+    useEffect(() => {
+        console.log("ID: ", id);
+        const textLabel = document.querySelector(`textarea[id="uml-textarea-clase-${id}"]`);
+        console.log("TextLabel: ", textLabel, );
+
+        const handleTextareaClickL = () => {
+            const newValue = prompt('Ingrese el nuevo valor:', textLabel.value);
+            if (newValue !== null) {
+                data.label = newValue;
+            }
+        };
+
+        if (textLabel) {
+            textLabel.addEventListener('click', handleTextareaClickL);
+
+            // Cleanup the event listener on component unmount
+            return () => {
+                textLabel.removeEventListener('click', handleTextareaClickL);
+            };
+        }
+    }, []);
+
+    useEffect(() => {
+        const textAttributes = document.querySelector(`textarea[id="uml-textarea-atributos-${id}"]`);
+        console.log("TextAttr: ", textAttributes);
+
+        const handleTextareaClickA = () => {
+            const newValue = prompt('Ingrese el nuevo valor:', textAttributes.value);
+            if (newValue !== null) {
+                data.attributes = newValue;
+            }
+        };
+        if (textAttributes) {
+            textAttributes.addEventListener('click', handleTextareaClickA);
+
+            // Cleanup the event listener on component unmount
+            return () => {
+                textAttributes.removeEventListener('click', handleTextareaClickA);
+            };
+        }
+    }, []);
+
+    useEffect(() => {
+        const textMethods = document.querySelector(`textarea[id="uml-textarea-metodos-${id}"]`);
+
+        const handleTextareaClickM = () => {
+            const newValue = prompt('Ingrese el nuevo valor:', textMethods.value);
+            if (newValue !== null) {
+                data.methods = newValue;
+            }
+        };
+
+        if (textMethods) {
+            textMethods.addEventListener('click', handleTextareaClickM);
+
+            // Cleanup the event listener on component unmount
+            return () => {
+                textMethods.removeEventListener('click', handleTextareaClickM);
+            };
+        }
+    }, [])
+
     return (
         <>
             <NodeResizer color="#ff0071" isVisible={selected} minWidth={200} minHeight={220} />
             <div style={labelStyle}>
                 <div className="custom-drag-handle" style={dragHandleStyle}>
-                    <div className="uml-header"><textarea name="clase" className="uml-textarea-clase"
-                                autoComplete="off"> clase </textarea></div>
+                    <div className="uml-header">
+                        <textarea id={`uml-textarea-clase-${id}`} name="clase" className="uml-textarea-clase" autoComplete="off" value={data.label}></textarea>
+                    </div>
                     <div className='uml-cuerpo'>
                         <div className="uml-attributes">
-                            <textarea name="atributos" className="uml-textarea"
-                                autoComplete="off"> Atributos </textarea>
+                            <textarea id={`uml-textarea-atributos-${id}`} name="atributos" className="uml-textarea" autoComplete="off" value={data.attributes}></textarea>
                         </div>
                         <div className="uml-methods">
-                            <textarea name="atributos" className="uml-textarea"
-                                autoComplete="off"> Métodos </textarea>
+                            <textarea id={`uml-textarea-metodos-${id}`}name="metodos" className="uml-textarea" autoComplete="off" value={data.methods}></textarea>
                         </div>
                     </div>
-                    
                 </div>
             </div>
             <Handle type="source" position={Position.Top} id="a" />
@@ -60,11 +119,15 @@ const CustomNode = ({selected}) => {
             <Handle type="source" position={Position.Left} id="d" style={handleInvisibleStyle} />
         </>
     );
-}
+};
 
 CustomNode.propTypes = {
+    id: PropTypes.string.isRequired,
     data: PropTypes.shape({
+        id: PropTypes.string.isRequired,
         label: PropTypes.string.isRequired,
+        attributes: PropTypes.arrayOf(PropTypes.string).isRequired,
+        methods: PropTypes.arrayOf(PropTypes.string).isRequired,
     }).isRequired,
     selected: PropTypes.bool.isRequired,
 };

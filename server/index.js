@@ -10,9 +10,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(myConnection(mysql, {
-    host: 'localhost',
-    user: 'root',
-    password: '1111310322',
+    host: '34.148.216.46',
+    user: 'admin',
+    password: 'admin',
     database: 'jupiter'
 }, 'single'));
 

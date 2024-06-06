@@ -15,6 +15,7 @@ import ReactFlow, {
   useStoreApi,
   Background,
   BackgroundVariant,
+  useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomEdge from './CustomEdgeGer.jsx';
@@ -46,6 +47,7 @@ const DnDFlow = () => {
   const [selectedEdge, setSelectedEdge] = useState(null);
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
   const edgeUpdateSuccessful = useRef(true);
+  const { setViewport } = useReactFlow();
 
   const fitViewOptions = { padding: 4 };
   const onConnect = useCallback(
@@ -245,15 +247,38 @@ const DnDFlow = () => {
     event.dataTransfer.effectAllowed = 'move';
   };
 
-  const onImport = () => {
-    console.log('Importar');
-    // Lógica para importar
+  const downloadJson = (content, fileName) => {
+    const blob = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const onExport = () => {
-    console.log('Exportar');
-    // Lógica para exportar
+    if (reactFlowInstance) {
+      const flow = reactFlowInstance.toObject();
+      downloadJson(flow, 'flow.json');
+    }
   };
+
+  const onImport = useCallback((event) => {
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      const flow = JSON.parse(e.target.result);
+      if (flow) {
+        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+        setNodes(flow.nodes || []);
+        setEdges(flow.edges || []);
+        setViewport({ x, y, zoom });
+      }
+    };
+    fileReader.readAsText(event.target.files[0]);
+  }, [setNodes, setViewport]);
 
   const items = [
     {
@@ -324,14 +349,16 @@ const DnDFlow = () => {
 
   ];
 
+
+
   return (
     <>
       <CustomHeader />
 
       <div className="dndflow">
-        
+
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-        
+
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -347,7 +374,7 @@ const DnDFlow = () => {
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={onEdgeUpdateEnd}
             onEdgeClick={onEdgeClick}
-            onEdgeContextMenu={handleContextMenu} // Añadimos el evento de menú contextual
+            onEdgeContextMenu={handleContextMenu}
             connectionMode={ConnectionMode.Loose}
             fitView
             fitViewOptions={fitViewOptions}
@@ -357,7 +384,7 @@ const DnDFlow = () => {
             <div className="controls-top-right">
               <Controls />
             </div>
-            
+
             <Background variant={BackgroundVariant.Cross} gap={50} />
           </ReactFlow>
           {contextMenu.visible && (
@@ -397,16 +424,14 @@ const DnDFlow = () => {
             mode="inline"
             items={items}
           />
-        </aside>
 
-        <div className="right-t">
-          <Button icon={<UploadOutlined />} onClick={onImport}>
-            Importar
-          </Button>
-          <Button icon={<DownloadOutlined />} onClick={onExport}>
-            Exportar
-          </Button>
-        </div>
+          <div className="right-t">
+            <Button icon={<UploadOutlined />} onClick={onExport}>
+              Export
+            </Button>
+            <input icon={<DownloadOutlined />} type="file" accept=".json" onChange={onImport} />
+          </div>
+        </aside>
       </div>
     </>
   );

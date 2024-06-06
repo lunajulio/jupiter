@@ -1,3 +1,39 @@
+/* Añade este CSS al final de tu archivo create.css */
+
+/* Estilos para los botones con iconos */
+.toolbar-button {
+  padding: 5px;
+  margin-bottom: 10px;
+  background-color: transparent; /* Fondo transparente */
+  color: #000000; /* Color del texto */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* Centra verticalmente el icono y el texto */
+}
+
+
+.controls-top-right {
+  position: absolute;
+  top: 17%; /* Puedes ajustar el valor según sea necesario */
+  left: 20% ;
+  z-index: 10; /* Asegura que esté por encima de otros elementos */
+}
+
+/* Estilos para los iconos dentro de los botones */
+.toolbar-button i {
+  margin-right: 5px; /* Espacio entre el icono y el texto */
+  color: inherit; /* Hereda el color del texto */
+}
+
+.right-t {
+  position: absolute;
+  top: 10%;
+  right: 10%;
+}
+
+
 .dndflow {
   flex-direction: column;
   display: flex;
@@ -6,10 +42,10 @@
 }
 
 .dndflow aside {
-  border-right: 1px solid #b49dd4;
+  border-right: 1px solid #faf9fb;
   padding: 15px 10px;
   font-size: 12px;
-  background: #b49dd4;
+  background: #fafafa;
 }
 
 .dndflow aside .description {
@@ -202,4 +238,33 @@
   font-size: 16px;
   margin: 5px;
   cursor: pointer;
+}
+
+.toolbar {
+  position: absolute;
+  left: 2%;
+  top: 10%;
+}
+
+.context-menu {
+  position: absolute;
+  z-index: 1000;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: none;
+}
+
+.context-menu.show {
+  display: block;
+}
+
+.context-menu-item {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.context-menu-item:hover {
+  background-color: #f0f0f0;
 }

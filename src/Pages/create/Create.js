@@ -1,4 +1,8 @@
 import { useState, useRef, useCallback } from 'react';
+import { Button } from 'antd';
+import { ToolOutlined, UploadOutlined, DownloadOutlined } from '@ant-design/icons';
+import { Menu } from 'antd';
+import CustomHeader from '../../Components/header/Header.js';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -13,26 +17,20 @@ import ReactFlow, {
   BackgroundVariant,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-
-//import Sidebar from './Sidebar.js';
-//import ResizableUMLNodeSelected from './ResizableUMLNodeSelected.jsx';
 import CustomEdge from './CustomEdgeGer.jsx';
 import { initialEdges, initialNodes } from './nodes-and-edges.jsx';
 import './create.css';
-
 import CustomNode from './CustomNode.jsx';
 
 const MIN_DISTANCE = 0;
 
 const nodeTypes = {
-  //umlNode: ResizableUMLNodeSelected,
   newNode: CustomNode,
 };
 
 const edgeTypes = {
   custom: CustomEdge,
 };
-
 
 const getId = (() => {
   let id = 0;
@@ -46,13 +44,13 @@ const DnDFlow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [selectedEdge, setSelectedEdge] = useState(null);
+  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
   const edgeUpdateSuccessful = useRef(true);
-
 
   const fitViewOptions = { padding: 4 };
   const onConnect = useCallback(
     (params) =>
-      setEdges((eds) => addEdge({ ...params, type: 'custom', markerEnd: { type: MarkerType.Arrow }}, eds)),
+      setEdges((eds) => addEdge({ ...params, type: 'custom', markerEnd: { type: MarkerType.Arrow } }, eds)),
     []
   );
 
@@ -78,7 +76,7 @@ const DnDFlow = () => {
       {
         distance: Number.MAX_VALUE,
         node: null,
-      },
+      }
     );
 
     if (!closestNode.node) {
@@ -110,7 +108,6 @@ const DnDFlow = () => {
             (ne) =>
               ne.source === closeEdge.source && ne.target === closeEdge.target,
           )
-
         ) {
           closeEdge.className = 'temp';
           nextEdges.push(closeEdge);
@@ -154,21 +151,20 @@ const DnDFlow = () => {
     (event) => {
       event.preventDefault();
 
-      /*const type = event.dataTransfer.getData('application/reactflow');
+      const type = event.dataTransfer.getData('application/reactflow');
 
       if (typeof type === 'undefined' || !type) {
         return;
-      }*/
+      }
 
       const position = reactFlowInstance.project({
-        x: event.clientX,
-        y: event.clientY,
+        x: event.clientX - reactFlowWrapper.current.getBoundingClientRect().left,
+        y: event.clientY - reactFlowWrapper.current.getBoundingClientRect().top,
       });
 
       const newNode = {
         id: getId(),
-        type: 'newNode',
-        dragHandle: '.custom-drag-handle',
+        type,
         position,
         data: {
           label: 'Class',
@@ -187,7 +183,7 @@ const DnDFlow = () => {
 
       setNodes((nds) => nds.concat(newNode));
     },
-    [reactFlowInstance],
+    [reactFlowInstance]
   );
 
   const onEdgeUpdateStart = useCallback(() => {
@@ -211,72 +207,208 @@ const DnDFlow = () => {
     setSelectedEdge(edge.id); // Guardar el id del borde seleccionado
   }, []);
 
+  const handleContextMenu = (event, edge) => {
+    event.preventDefault();
+    setSelectedEdge(edge.id);
+    setContextMenu({ visible: true, x: event.clientX, y: event.clientY });
+  };
+
+  const handleDeleteEdge = () => {
+    if (selectedEdge) {
+      setEdges((eds) => eds.filter((edge) => edge.id !== selectedEdge));
+      setContextMenu({ visible: false, x: 0, y: 0 });
+    }
+  };
 
   const addArrowToEdge = useCallback(() => {
     if (selectedEdge) {
       setEdges((eds) =>
         eds.map((edge) => {
           if (edge.id === selectedEdge) {
-            console.log("Type: " + edge.markerEnd.type);
-            if (edge.markerEnd.type === 'arrow') {
-              return { ...edge, markerEnd: { type: '' }, };
-            } else {
-              return { ...edge, markerEnd: { type: 'arrow' }, };
-            }
+            console.log("Type: " + (edge.markerEnd?.type || 'none'));
+            return {
+              ...edge,
+              markerEnd: {
+                type: edge.markerEnd?.type === MarkerType.Arrow ? MarkerType.None : MarkerType.Arrow,
+              },
+            };
           }
           return edge;
-        }),
+        })
       );
+      setContextMenu({ visible: false, x: 0, y: 0 });
     }
   }, [selectedEdge, setEdges]);
-
 
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
   };
-  
+
+  const onImport = () => {
+    console.log('Importar');
+    // Lógica para importar
+  };
+
+  const onExport = () => {
+    console.log('Exportar');
+    // Lógica para exportar
+  };
+
+  const items = [
+    {
+      key: 'sub1',
+      label: 'Elements',
+      icon: <ToolOutlined />,
+      children: [
+        {
+          key: 'g1',
+          label: 'UML tools',
+          type: 'group',
+          children: [
+            {
+              key: '1',
+              label: (
+                <div
+                  draggable
+                  onDragStart={(event) => onDragStart(event, 'newNode')}
+                >
+                  Simple Class
+                </div>
+              ),
+            },
+            {
+              key: '2',
+              label: 'Active Class',
+            },
+            {
+              key: '3',
+              label: 'Interface',
+            },
+            {
+              key: '4',
+              label: 'Simple Interface',
+            },
+            {
+              key: '5',
+              label: 'Package',
+            },
+
+          ],
+        },
+        {
+          key: 'g2',
+          label: 'Relationships',
+          type: 'group',
+          children: [
+            {
+              key: '6',
+              label: 'Inheritance',
+            },
+            {
+              key: '7',
+              label: 'Association',
+            },
+            {
+              key: '8',
+              label: 'Aggregation',
+            },
+            {
+              key: '9',
+              label: 'Composition',
+            },
+          ],
+        },
+      ],
+    },
+
+  ];
 
   return (
-    <div className="dndflow">
-      <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onNodeDrag={onNodeDrag}
-          onNodeDragStop={onNodeDragStop}
-          onConnect={onConnect}
-          onInit={setReactFlowInstance}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          onEdgeUpdate={onEdgeUpdate}
-          onEdgeUpdateStart={onEdgeUpdateStart}
-          onEdgeUpdateEnd={onEdgeUpdateEnd}
-          onEdgeClick={onEdgeClick}
-          connectionMode={ConnectionMode.Loose}
-          fitView
-          fitViewOptions={fitViewOptions}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-        >
-          <Controls />
-          <Background variant={BackgroundVariant.Cross} gap={50} />
-        </ReactFlow>
-      </div>
-      
-      <aside className='toolbar'>
-        <div className="description">You can drag these nodes to the pane on the right.</div>
-        <div className="dndnode umlNode" onDragStart={(event) => onDragStart(event, 'umlNode')} draggable>
-          Class Node
+    <>
+      <CustomHeader />
+
+      <div className="dndflow">
+        
+        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+        
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onNodeDrag={onNodeDrag}
+            onNodeDragStop={onNodeDragStop}
+            onConnect={onConnect}
+            onInit={setReactFlowInstance}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            onEdgeUpdate={onEdgeUpdate}
+            onEdgeUpdateStart={onEdgeUpdateStart}
+            onEdgeUpdateEnd={onEdgeUpdateEnd}
+            onEdgeClick={onEdgeClick}
+            onEdgeContextMenu={handleContextMenu} // Añadimos el evento de menú contextual
+            connectionMode={ConnectionMode.Loose}
+            fitView
+            fitViewOptions={fitViewOptions}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+          >
+            <div className="controls-top-right">
+              <Controls />
+            </div>
+            
+            <Background variant={BackgroundVariant.Cross} gap={50} />
+          </ReactFlow>
+          {contextMenu.visible && (
+            <div
+              className="context-menu show"
+              style={{ top: contextMenu.y, left: contextMenu.x }}
+            >
+              <div className="context-menu-item" onClick={addArrowToEdge}>
+                Quitar dirección
+              </div>
+              <div className="context-menu-item" onClick={handleDeleteEdge}>
+                Eliminar Flecha
+              </div>
+            </div>
+          )}
         </div>
-        <div className="target">
-        <button className='target-button' onClick={() => addArrowToEdge()}>Target</button> {/* Botón para agregar flecha al target */}
+
+        <aside className='toolbar'>
+          <Menu
+            onClick={(e) => {
+              const selectedItem = items
+                .flatMap(item => item.children || [])
+                .flatMap(child => child.children || [child])
+                .find(child => child.key === e.key);
+
+              if (selectedItem && selectedItem.onClick) {
+                selectedItem.onClick(e);
+              } else {
+                console.log('Menu item clicked:', e);
+              }
+            }}
+            style={{
+              width: 256,
+            }}
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1']}
+            mode="inline"
+            items={items}
+          />
+        </aside>
+
+        <div className="right-t">
+          <Button icon={<UploadOutlined />} onClick={onImport}>
+            Importar
+          </Button>
+          <Button icon={<DownloadOutlined />} onClick={onExport}>
+            Exportar
+          </Button>
+        </div>
       </div>
-      </aside>
-      
-    </div>
+    </>
   );
 };
 

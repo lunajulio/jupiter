@@ -38,9 +38,3 @@ Jupiter es una propuesta innovadora de aplicación web donde cualquier usuario p
 ---
 
 ¡Esperamos que disfrutes usando Jupiter tanto como nosotros disfrutamos desarrollándolo! 🌟🚀
-## Equipo de desarrollo
-- Sebastian Arteta
-- German Centanaro
-- Jason Estrada
-- Luna Julio
-
